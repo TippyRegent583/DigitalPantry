@@ -1,8 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import UploadAndDisplayImage from './UploadAndDisplayImage';
-//import UploadImage from './UploadImage';
+import RecipeFinder from './RecipeFinder';
+import React, { useEffect, useState } from 'react';
 
+
+
+//import UploadImage from './UploadImage';
+const apiKey = '94c3a65b06f84d5fb0a512206092b8e2'
 
 function MyButton() {
   return (
@@ -15,6 +20,7 @@ function MyButton() {
 
 
 const ItemList = ({ items }) => {
+  console.log(":D")
   return (
     <ul>
       {items.map((item) => (
@@ -25,7 +31,6 @@ const ItemList = ({ items }) => {
     </ul>
   );
 };
-
 
 
 const App = () => {
@@ -53,6 +58,10 @@ const App = () => {
         {/*<UploadImage />*/}
         <UploadAndDisplayImage />
       </div>
+      <div className="App">
+      <RecipeFinder items={items} />
+
+    </div>
       
     </div>
   );
