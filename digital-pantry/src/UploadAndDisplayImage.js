@@ -2,11 +2,13 @@ import React, { useState } from "react";
 
 const textFromImg = async (image) => {
   const { createWorker } = require('tesseract.js');
-  const worker = await createWorker('eng');
+  const worker = await createWorker('eng', 1, {
+    logger: m => console.log(m), // Add logger here
+  });
 
   (async () => {
     const { data: { text } } = await worker.recognize(image);
-    console.log(text);
+    const lines = text.split("\n");
     await worker.terminate();
   })();
 }
