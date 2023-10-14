@@ -1,19 +1,16 @@
 import logo from './logo.svg';
 import './App.css';
 import UploadAndDisplayImage from './UploadAndDisplayImage';
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@material-ui/core/Button';
 import PopupBox from './PopupBox';
 import PopupBoxUltimate from './PopupBoxUltimate';
-
-
+import RecipeFinder from './RecipeFinder';
 
 //import UploadImage from './UploadImage';
-
-
-
+const apiKey = '94c3a65b06f84d5fb0a512206092b8e2'
 
 function MyButton() {
   return (
@@ -37,6 +34,7 @@ function MUIComponent() {
 
 
 const ItemList = ({ items }) => {
+  console.log(":D")
   return (
     <ul>
       {items.map((item) => (
@@ -65,37 +63,6 @@ const RecipeBox = ({ recipe }) => {
     </div>
   );
 };
-
-
-/*
-const PopupGfg = () => {
-
-  return (
-      <div>
-          <h4>Popup - GeeksforGeeks</h4>
-          <Popup trigger=
-              {<button> Click to open modal </button>} 
-              modal nested>
-              {
-                  close => (
-                      <div className='modal'>
-                          <div className='content'>
-                              Welcome to GFG!!!
-                          </div>
-                          <div>
-                              <button onClick=
-                                  {() => close()}>
-                                      Close modal
-                              </button>
-                          </div>
-                      </div>
-                  )
-              }
-          </Popup>
-      </div>
-  );
-};
-*/
 
 
 const App = () => {
@@ -129,11 +96,7 @@ const App = () => {
         <div className="left-side">
           <h2>Pantry</h2>
           <ItemList items={items} />
-          {/*<PopupGfg />*/}
-          {/*<AlertDialogSlide />*/}
-          
           <PopupBox />
-          {/*<PopupBoxUltimate />*/}
 
         </div>
         
@@ -142,12 +105,12 @@ const App = () => {
           {recipes.map((recipe) => (
             <RecipeBox key={recipe.name} recipe={recipe} />
           ))}
-        
-        
-          {/*<UploadImage />*/}
-          {/*<UploadAndDisplayImage /> */}
         </div>
       </div>
+      <div className="App">
+      <RecipeFinder items={items} />
+
+    </div>
       
     </div>
   );
@@ -157,27 +120,4 @@ export default App;
 
 
 
-/*
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
 
-export default App;
-*/
