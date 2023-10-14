@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import UploadAndDisplayImage from './UploadAndDisplayImage';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@material-ui/core/Button';
@@ -29,24 +29,179 @@ function MUIComponent() {
 }
 
 
+//function mergeMapsWithCounts(map1, map2) {
+const CombinedList = ({ map1, map2 }) => {
+  const mergedMap = new Map();
+
+  for (const [key, count] of Object.entries(map1)) {
+    mergedMap.set(key, count);
+  }
+
+  for (const [key, count] of Object.entries(map2)) {
+    if (mergedMap.has(key)) {
+      mergedMap.set(key, mergedMap.get(key) + count);
+    } else {
+      mergedMap.set(key, count);
+    }
+  }
+
+  return mergedMap;
+}
 
 
 
+/*
+const CombinedList = ({ items, otherItems }) => {
+  const [updatedItems, setUpdatedItems] = useState(items);
+
+  const updateCounts = (items, otherItems) => {
+    // Create a new list with the updated counts.
+    const newItems = items.map((item) => {
+      const otherItem = otherItems.find((otherItem) => otherItem.name === item.name);
+      if (otherItem) {
+        // Update the count of the existing ingredient.
+        item.count += otherItem.count;
+      } else {
+        // Add the new ingredient to the list.
+        item = otherItem;
+      }
+      return item;
+    });
+
+    // Return the new list.
+    return newItems;
+  };
+
+  useEffect(() => {
+    // Update the counts when the component mounts.
+    const newItems = updateCounts(items, otherItems);
+    setUpdatedItems(newItems);
+  }, [items, otherItems]);
+
+}
+*/
+
+
+/*
+const ItemList = ({ items }) => {
+  const [counts, setCounts] = useState(() => {
+    const initialCounts = {};
+    for (const item of items) {
+      initialCounts[item.name] = 0;
+    }
+    return initialCounts;
+  });
+
+  const handleCountChange = (name, value) => {
+    const updatedCounts = { ...counts };
+    updatedCounts[name] = value;
+    setCounts(updatedCounts);
+  };
+
+  return (
+    <ul>
+      {items.map((item) => {
+        const count = useMemo(() => counts[item.name], [counts, item.name]);
+
+        return (
+          <li key={item.name}>
+            <span className="name">{item.name}</span>
+            <input
+              type="number"
+              className="count"
+              value={count}
+              onChange={(e) => handleCountChange(item.name, e.target.value)}
+            />
+            <span className="unit">{item.unit}</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+*/
 
 const ItemList = ({ items }) => {
+  const [counts, setCounts] = useState(() => {
+    const initialCounts = {};
+    for (const item of items) {
+      initialCounts[item.name] = 0;
+    }
+    return initialCounts;
+  });
+
+  const handleCountChange = (name, value) => {
+    const updatedCounts = { ...counts };
+    updatedCounts[name] = value;
+    setCounts(updatedCounts);
+  };
+
+  const countsMap = useMemo(() => {
+    const countsMap = {};
+    for (const item of items) {
+      countsMap[item.name] = counts[item.name];
+    }
+    return countsMap;
+  }, [counts]);
+
+  return (
+    <ul>
+      {items.map((item) => {
+        const count = countsMap[item.name];
+
+        return (
+          <li key={item.name}>
+            <span className="name">{item.name}</span>
+            <input
+              type="number"
+              className="count"
+              value={count}
+              onChange={(e) => handleCountChange(item.name, e.target.value)}
+            />
+            <span className="unit">{item.unit}</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+
+/*
+const ItemList = ({ items }) => {
   console.log(":D")
+
+  const [count, setCount] = useState('');
+
+  const [itemCounts, setItemCounts] = useState(
+    items.reduce((acc, item) => {
+      acc[item.name] = '';
+      return acc;
+    }, {})
+  );
+
+
   return (
     <ul>
       {items.map((item) => (
+
         <li key={item.name}>
           <span className="name">{item.name}</span>
-          <span className="count">{item.quantity}</span>
+          <input
+            type="number"
+            className="count"
+            value={count}
+            id={item.name}
+            
+            onChange={(e) => setCount(e.target.value)}
+
+          />
           <span className="unit">{item.unit}</span>
         </li>
       ))}
     </ul>
   );
 };
+*/
 
 const RecipeBox = ({ recipe }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -73,6 +228,12 @@ const App = () => {
     { name: "Milk", quantity: 1, unit: "gal" },
   ];
 
+  const items2 = [
+    { name: "Apple", quantity: 1, unit: "lb" },
+    { name: "Orange", quantity: 2, unit: "pcs" },
+    { name: "Milk", quantity: 4, unit: "gal" },
+  ];
+
   const recipes = [
     {
       name: "Chocolate Chip Cookies",
@@ -96,6 +257,9 @@ const App = () => {
         <div className="left-side">
           <h2>Pantry</h2>
           <ItemList items={items} />
+          <ItemList items={items2} />
+          {/*<CombinedList items={items} items2={items2}/>*/}
+          <CombinedList map1={items} map2={items2} />
           <PopupBox />
 
         </div>
