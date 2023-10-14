@@ -6,8 +6,7 @@ const UploadAndDisplayImage = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   return (
-    <div>
-      <h1>Upload and Display Image using React Hook's</h1>
+    <div className="upload-columns">
 
       {selectedImage && (
         <div>

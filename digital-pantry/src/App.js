@@ -2,8 +2,17 @@ import logo from './logo.svg';
 import './App.css';
 import UploadAndDisplayImage from './UploadAndDisplayImage';
 import React, { useState } from "react";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import Button from '@material-ui/core/Button';
+import PopupBox from './PopupBox';
+import PopupBoxUltimate from './PopupBoxUltimate';
+
+
 
 //import UploadImage from './UploadImage';
+
+
 
 
 function MyButton() {
@@ -14,6 +23,17 @@ function MyButton() {
   );
 }
 
+function MUIComponent() {
+  return (
+    <Button variant="contained" color="primary">
+      Click Me!
+    </Button>
+  );
+}
+
+
+
+
 
 
 const ItemList = ({ items }) => {
@@ -21,7 +41,9 @@ const ItemList = ({ items }) => {
     <ul>
       {items.map((item) => (
         <li key={item.name}>
-          {item.name} {item.quantity} {item.unit}
+          <span className="name">{item.name}</span>
+          <span className="count">{item.quantity}</span>
+          <span className="unit">{item.unit}</span>
         </li>
       ))}
     </ul>
@@ -38,11 +60,42 @@ const RecipeBox = ({ recipe }) => {
   return (
     <div className="recipe-box" onClick={handleClick}>
       <h3>{recipe.name}</h3>
+      <p>{"# of # ingredients available"}</p>
       {isOpen && <p>{recipe.instructions}</p>}
     </div>
   );
 };
 
+
+/*
+const PopupGfg = () => {
+
+  return (
+      <div>
+          <h4>Popup - GeeksforGeeks</h4>
+          <Popup trigger=
+              {<button> Click to open modal </button>} 
+              modal nested>
+              {
+                  close => (
+                      <div className='modal'>
+                          <div className='content'>
+                              Welcome to GFG!!!
+                          </div>
+                          <div>
+                              <button onClick=
+                                  {() => close()}>
+                                      Close modal
+                              </button>
+                          </div>
+                      </div>
+                  )
+              }
+          </Popup>
+      </div>
+  );
+};
+*/
 
 
 const App = () => {
@@ -69,20 +122,30 @@ const App = () => {
   return (
 
     <div className="app">
+      <div className="title">
+        <h1>App</h1>
+      </div>
       <div className="all-containers">
         <div className="left-side">
+          <h2>Pantry</h2>
           <ItemList items={items} />
+          {/*<PopupGfg />*/}
+          {/*<AlertDialogSlide />*/}
+          
+          <PopupBox />
+          {/*<PopupBoxUltimate />*/}
+
         </div>
         
         <div className="right-side">
+          <h2>Recipes</h2>
           {recipes.map((recipe) => (
             <RecipeBox key={recipe.name} recipe={recipe} />
           ))}
-        </div>
         
-        <div className="right-side">
+        
           {/*<UploadImage />*/}
-          <UploadAndDisplayImage />
+          {/*<UploadAndDisplayImage /> */}
         </div>
       </div>
       
