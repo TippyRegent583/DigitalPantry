@@ -1,14 +1,16 @@
-/*
-async function scanReceipt(image) {
+import Tesseract from 'tesseract.js'
 
-    const vision = require('@google-cloud/vision');
-    const client = new vision.ImageAnnotatorClient();
-  
+const worker = await Tesseract.createWorker("eng", 1, {
+  corePath: '../../node_modules/tesseract.js-core',
+  workerPath: "/dist/worker.min.js",
+  logger: function(m){console.log(m);}
+});
 
-    const [result] = await client.textDetection(image);
-    const [detections] = result.textAnnotations;
-    const text = detections ? detections.description.trim() : '';
-    console.log('Text:');
-    console.log(text)
-  }
-  */
+const recognize = async function(evt){
+const files = evt.target.files;
+
+for (let i=0; i<files.length; i++) {
+  const ret = await worker.recognize(files[i]);
+  console.log(ret.data.text);
+}
+}

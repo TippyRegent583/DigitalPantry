@@ -1,5 +1,15 @@
 import React, { useState } from "react";
-import ScanReceipt from './ScanReceipt';
+
+const textFromImg = async (image) => {
+  const { createWorker } = require('tesseract.js');
+  const worker = await createWorker('eng');
+
+  (async () => {
+    const { data: { text } } = await worker.recognize(image);
+    console.log(text);
+    await worker.terminate();
+  })();
+}
 
 const UploadAndDisplayImage = () => {
 
@@ -23,17 +33,17 @@ const UploadAndDisplayImage = () => {
 
       <br />
       <br />
-      
+
       <input
         type="file"
         name="myImage"
         onChange={(event) => {
           console.log(event.target.files[0]);
           setSelectedImage(event.target.files[0]);
-          //<scanReceipt image={event.target.files[0]}/>
-        }}
+          textFromImg(event.target.files[0]);}}
       />
     </div>
+    
   );
 };
 
