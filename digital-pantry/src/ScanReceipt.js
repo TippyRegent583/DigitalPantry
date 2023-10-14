@@ -1,3 +1,4 @@
+/*
 async function scanReceipt(image) {
 
     const vision = require('@google-cloud/vision');
@@ -10,3 +11,4 @@ async function scanReceipt(image) {
     console.log('Text:');
     console.log(text)
   }
+  */
