@@ -57,8 +57,10 @@ const RecipeBox = ({ recipe }) => {
 
   return (
     <div className="recipe-box" onClick={handleClick}>
-      <h3>{recipe.name}</h3>
-      <p>{"# of # ingredients available"}</p>
+      <h3>{recipe.title}</h3>
+      <p>Missing Ingredients: {recipe.missedIngredientCount}</p>
+      <p>Used Ingredients: {recipe.usedIngredientCount}</p>
+      <p>Unused Ingredients: {recipe.unusedIngredients.length}</p>
       {isOpen && <p>{recipe.instructions}</p>}
     </div>
   );
@@ -66,25 +68,18 @@ const RecipeBox = ({ recipe }) => {
 
 
 const App = () => {
+  console.log("Hey")
+  console.log("Data", RecipeFinder.getPantry)
 
   const items = [
-    { name: "Apple", quantity: 1, unit: "lb" },
-    { name: "Banana", quantity: 2, unit: "pcs" },
-    { name: "Milk", quantity: 1, unit: "gal" },
+    
   ];
 
-  const recipes = [
-    {
-      name: "Chocolate Chip Cookies",
-      instructions:
-        "Preheat oven to 350 degrees F (175 degrees C). Cream together 1 cup butter and 1 cup sugar until light and fluffy. Beat in 2 eggs one at a time, then stir in 2 1/4 cups all-purpose flour, 1 teaspoon baking soda, and 1 teaspoon salt. Fold in 1 cup semisweet chocolate chips. Drop by rounded tablespoons onto ungreased baking sheets. Bake for 10-12 minutes, or until golden brown. Let cool on baking sheets for a few minutes before transferring to a wire rack to cool completely.",
-    },
-    {
-      name: "Banana Bread",
-      instructions:
-        "Preheat oven to 350 degrees F (175 degrees C). Grease and flour a 9x5 inch loaf pan. In a large bowl, mash 3 ripe bananas. In a separate bowl, cream together 1/2 cup butter and 1 cup sugar until light and fluffy. Beat in 2 eggs one at a time, then stir in 1 1/2 cups all-purpose flour, 1 teaspoon baking soda, 1/2 teaspoon salt, and 1/2 teaspoon ground cinnamon. Fold in the mashed bananas. Pour batter into prepared loaf pan and bake for 50-60 minutes, or until a toothpick inserted into the center comes out clean. Let cool in pan for 10 minutes before removing and cooling completely on a wire rack.",
-    },
-  ];
+  const [pantry, setPantry] = useState([])
+
+  //const [pantry, setPantry] = useState([]);
+
+  const [recipes, setRecipes] = useState([])
 
   return (
 
@@ -95,15 +90,20 @@ const App = () => {
       <div className="all-containers">
         <div className="left-side">
           <h2>Pantry</h2>
-          <ItemList items={items} />
+          
+          {pantry.length > 0 ? ( // Conditional rendering based on pantry data
+          <ItemList items={pantry} />
+          ) : (
+          <p>Loading pantry data...</p>
+          )}
           <PopupBox />
-
+          <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes}/>
         </div>
         
         <div className="right-side">
           <h2>Recipes</h2>
           {recipes.map((recipe) => (
-            <RecipeBox key={recipe.name} recipe={recipe} />
+            <RecipeBox key={recipe.id} recipe={recipe} />
           ))}
         </div>
       </div>

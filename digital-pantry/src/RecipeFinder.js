@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 
-const RecipeFinder = () => {
+const RecipeFinder = (props) => {
   const [apiKey] = useState('c915c42ef4e84983b197eb7cc6421be6');
   const [ingredient, setIngredient] = useState('');
-  const [pantry, setPantry] = useState([]);
-  const [recipes, setRecipes] = useState([]);
+  const { pantry } = props;
+  const { recipes } = props;
   const [searchRecipe, setSearchRecipe] = useState('');
   const [ins, setIns] = useState('');
 
+  const getPantry = () => {
+    return pantry;
+  };
+
   const handleSearch = async () => {
     try {
-      const str = pantry.join(',+');
+      const str = pantry ? pantry.map(item => item.name).join(',+') : "";
       const response = await fetch(`https://api.spoonacular.com/recipes/findByIngredients?apiKey=${apiKey}&ingredients=${str}&number=20&ranking=2`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      console.log(data)
-      setRecipes(data);
+      console.log(data);
+      props.setRecipes(data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -25,24 +29,26 @@ const RecipeFinder = () => {
 
   const handleSearchR = async () => {
     try {
-      const str = pantry.join(',+');
-      setSearchRecipe('')
+      const str = pantry ? pantry.map(item => item.name).join(',+') : "";
+      setSearchRecipe('');
       const response = await fetch(`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${searchRecipe}&number=20&includeIngredients${str}&fillIngredients=true&sort=min-missing-ingredients`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      console.log(data.results)
-      setRecipes(data.results);
+      console.log(data.results);
+      props.setRecipes(data.results);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
 
   const handleAdd = async () => {
-    pantry.push(ingredient)
-    setIngredient('')
-  }
+    // Create an object representing the ingredient and add it to the pantry
+    const newIngredient = { name: ingredient, count: 1, unit: 'unit' };
+    props.setPantry([...pantry, newIngredient]);
+    setIngredient('');
+  };
 
   const handleInfo = async ({ id }) => {
     console.log(id)
@@ -59,18 +65,18 @@ const RecipeFinder = () => {
       console.error('Error fetching data:', error);
     }
   };
-  
+
   const instructions = (data) => {
     if (!data || !data[0] || !data[0].steps) {
       return <p>No instructions available.</p>;
     }
-  
+
     const steps = data[0].steps;
-  
+
     if (steps.length === 0) {
       return <p>No steps available for this recipe.</p>;
     }
-  
+
     return (
       <ul>
         {steps.map((step, index) => (
@@ -82,8 +88,21 @@ const RecipeFinder = () => {
 
   return (
     <div>
+      {/*}
       <h1>Ingredients:</h1>
-      <p>{pantry}</p>
+      
+      <ul>
+        {pantry ? (
+          pantry.map((item, index) => (
+            <li key={index}>
+              {item.name} - {item.count} {item.unit}
+            </li>
+          ))
+        ) : (
+          <p>Loading pantry data...</p>
+        )}
+      </ul>
+        */}
       <h1>Find Recipes</h1>
       <input
         type="text"
@@ -95,37 +114,38 @@ const RecipeFinder = () => {
       <div>
         <button onClick={handleSearch}>Find Recipes</button>
         <div>
-        <input
-        type="text"
-        placeholder="Search by Recipe"
-        value={searchRecipe}
-        onChange={(e) => setSearchRecipe(e.target.value)}
-      />
-      <button onClick={handleSearchR}>Search</button>
+          <input
+            type="text"
+            placeholder="Search by Recipe"
+            value={searchRecipe}
+            onChange={(e) => setSearchRecipe(e.target.value)}
+          />
+          <button onClick={handleSearchR}>Search</button>
         </div>
         <div>
-        {Array.isArray(ins) ? (
-    <div>
-      {ins.map((step, index) => (
-        <p key={index}>{step.step}</p>
-      ))}
-    </div>
-  ) : null}
-  {/* ... */}
+          {Array.isArray(ins) ? (
+            <div>
+              {ins.map((step, index) => (
+                <p key={index}>{step.step}</p>
+              ))}
+            </div>
+          ) : null}
         </div>
+        {/*}
         {recipes && recipes.length > 0 ? (
-        recipes.map((recipe, index) => (
-        <div key={index}>
-        <h2>{recipe.title}</h2>
-      <button onClick={() => handleInfo(recipe)}>More Info</button>
-      <p>Missing Ingredients: {recipe.missedIngredientCount}</p>
-      <p>Used Ingredients: {recipe.usedIngredientCount}</p>
-      <p>Unused Ingredients: {recipe.unusedIngredients.length}</p>
-    </div>
-  ))
-) : (
-  <p>No recipes found with this ingredient.</p>
-)}
+          recipes.map((recipe, index) => (
+            <div key={index}>
+              <h2>{recipe.title}</h2>
+              <button onClick={() => handleInfo(recipe)}>More Info</button>
+              <p>Missing Ingredients: {recipe.missedIngredientCount}</p>
+              <p>Used Ingredients: {recipe.usedIngredientCount}</p>
+              <p>Unused Ingredients: {recipe.unusedIngredients.length}</p>
+            </div>
+          ))
+        ) : (
+          <p>No recipes found with this ingredient.</p>
+        )}
+        */}
       </div>
     </div>
   );
