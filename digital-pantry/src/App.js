@@ -135,6 +135,7 @@ const App = () => {
   const [pantry, setPantry] = useState([])
   const [recipes, setRecipes] = useState([])
   const [ins, setIns] = useState('')
+  const [merge, setMerge] = useState([])
 
   const handleInfo = async (id) => {
     try {
@@ -168,9 +169,12 @@ const App = () => {
           {/*<ItemList items={items2} />*/}
           
           {/*<MergedArrayObjs array1={items} array2={items}/>*/}
-          <PopupBox />
+          <PopupBox merge = {merge} setMerge = {setMerge}/>
           <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
           {/*<Stats/>*/}
+        </div>
+        <div>
+          {merge}
         </div>
         
         <div className="right-side">

@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 
+const handleMerge = (newIngredient) => {
+  // Create an object representing the ingredient and add it to the pantry
+  RecipeFinder.handleMerge(newIngredient)
+}
+export {handleMerge}
+
 const RecipeFinder = (props) => {
   const [apiKey] = useState('c915c42ef4e84983b197eb7cc6421be6');
   const [ingredient, setIngredient] = useState('');
@@ -50,6 +56,11 @@ const RecipeFinder = (props) => {
     setIngredient('');
   };
 
+  const handleMerge = (newIngredient) => {
+    // Create an object representing the ingredient and add it to the pantry
+    RecipeFinder.props.setPantry([...pantry, ...newIngredient]);
+  };
+
   const handleInfo = async ({ id }) => {
     console.log(id)
     try {
@@ -61,7 +72,7 @@ const RecipeFinder = (props) => {
       const data = await response.json();
       console.log(data)
       setIns(data[0].steps);
-    } catch (error) {
+    } catch (error) { 
       console.error('Error fetching data:', error);
     }
   };

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { updateTrips } from "./Stats";
 
-
-
 const textFromImg = async (image) => {
   const { createWorker } = require('tesseract.js');
   const worker = await createWorker('eng');
@@ -54,10 +52,12 @@ const textFromImg = async (image) => {
     })
     console.log("DONE!!!")
     await worker.terminate();
+    return ingredients
   })();
 }
 
-const UploadAndDisplayImage = () => {
+const UploadAndDisplayImage = (props) => {
+  const {merge, setMerge} = props
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -85,7 +85,10 @@ const UploadAndDisplayImage = () => {
         onChange={(event) => {
           console.log(event.target.files[0]);
           setSelectedImage(event.target.files[0]);
-          textFromImg(event.target.files[0]);}}
+          const ingredients = textFromImg(event.target.files[0]);
+          setMerge(ingredients);
+
+        }}
       />
     </div>
     
