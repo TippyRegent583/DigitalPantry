@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import PopupBox from './PopupBox';
 import PopupBoxUltimate from './PopupBoxUltimate';
 import RecipeFinder from './RecipeFinder';
+import Stats from './Stats.js';
 
 //import UploadImage from './UploadImage';
 const apiKey = '94c3a65b06f84d5fb0a512206092b8e2'
@@ -154,7 +155,7 @@ const App = () => {
           {/*<CombinedList items={items} items2={items2}/>*/}
           <CombinedList map1={items} map2={items2} />
           <PopupBox />
-
+          <Stats/>
         </div>
         
         <div className="right-side">

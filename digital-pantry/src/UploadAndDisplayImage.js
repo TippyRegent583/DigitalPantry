@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { updateTrips } from "./Stats";
+
+
 
 const textFromImg = async (image) => {
   const { createWorker } = require('tesseract.js');
@@ -8,13 +11,31 @@ const textFromImg = async (image) => {
     const { data: { text } } = await worker.recognize(image);
     const lines = text.split("\n");
 
+    const regEx0 = /\d+(\.\d+)/;
+    const numbs = []
     const regEx1 = /\s(F|B)\s/g;
     const foodLines = []
     lines.forEach((line) => {
       if (regEx1.test(line)) {
         foodLines.push(line)
       }
+
+      const prices = line.match(regEx0)
+      if (prices != null) {
+        prices.forEach((num) => {
+          numbs.push(parseFloat(num))
+        })
+      }
     });
+
+    let max = 0.0
+    numbs.forEach((num) => {
+      if (num > max) {
+        max = num
+      }
+    })
+    console.log(max)
+    updateTrips(max)
 
     const regEx2 = /\b[a-zA-Z]{2,}\b/g;
     const ingredients = []
