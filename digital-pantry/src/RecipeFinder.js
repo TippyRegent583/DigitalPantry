@@ -45,7 +45,7 @@ const RecipeFinder = (props) => {
 
   const handleAdd = async () => {
     // Create an object representing the ingredient and add it to the pantry
-    const newIngredient = { name: ingredient, count: 1, unit: 'unit' };
+    const newIngredient = { name: ingredient, count: 1, unit: 'units' };
     props.setPantry([...pantry, newIngredient]);
     setIngredient('');
   };
@@ -103,7 +103,6 @@ const RecipeFinder = (props) => {
         )}
       </ul>
         */}
-      <h1>Find Recipes</h1>
       <input
         type="text"
         placeholder="Enter an ingredient"
@@ -111,8 +110,10 @@ const RecipeFinder = (props) => {
         onChange={(e) => setIngredient(e.target.value)}
       />
       <button onClick={handleAdd}>Add</button>
+      <hr></hr>
+      <h2>Find Recipes</h2>
       <div>
-        <button onClick={handleSearch}>Find Recipes</button>
+        <button onClick={handleSearch}>Search by Pantry</button>
         <div>
           <input
             type="text"

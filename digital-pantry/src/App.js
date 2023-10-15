@@ -11,6 +11,8 @@ import RecipeFinder from './RecipeFinder';
 import MergedArrayObjs from './MergedArrayObjs';
 //import ItemList from './ItemListMaker';
 import Stats from './Stats.js';
+import palImg from './ThePal.png';
+
 
 //import UploadImage from './UploadImage';
 const apiKey = '94c3a65b06f84d5fb0a512206092b8e2'
@@ -152,34 +154,61 @@ const App = () => {
   return (
 
     <div className="app">
-      <div className="title">
-        <h1>App</h1>
-      </div>
-      <div className="all-containers">
-        <div className="left-side">
-          <h2>Pantry</h2>
+      <nav><h1>PANTRY PAL</h1></nav>
+      <div className="main-container">
+        <div className="column">
+          <div className="item">
+            <h2>Pantry</h2>
+          </div>
           
           {pantry.length > 0 ? ( // Conditional rendering based on pantry data
           <ItemList items={pantry} />
           ) : (
-          <p>Loading pantry data...</p>
+          <p>Enter ingredients to begin!</p>
           )}
           {/*<ItemList items={items} />*/}
           {/*<ItemList items={items2} />*/}
           
           {/*<MergedArrayObjs array1={items} array2={items}/>*/}
-          <PopupBox />
-          <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
+          {/*<RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>*/}
           {/*<Stats/>*/}
         </div>
+
+        <div className="column-middle">
+          {/*
+          <div className="item">
+            <h2>Edit Pantry</h2>
+          </div>
+
+          <div className="item">
+            <PopupBox />
+          </div>
+          <div className="item">
+            <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
+          </div>
+          */}
+          <div className="item">
+            <img src={palImg} className="pal-img"></img>
+            <h2>Edit Pantry</h2>
+            
+
+
+            <PopupBox />
+            <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
+          </div>
+        </div>
         
-        <div className="right-side">
-          <h2>Recipes</h2>
-          <ul>
-          {recipes.map((recipe) => (
-            <RecipeBox key={recipe.id} recipe={recipe} handleInfo = {handleInfo} ins = {ins} />
-          ))}
-          </ul>
+        <div className="column">
+          <div className="item">
+            <h2>Recipes</h2>
+          </div>
+          <div className="item">
+            <ul className="recipe-ul">
+            {recipes.map((recipe) => (
+              <RecipeBox key={recipe.id} recipe={recipe} handleInfo = {handleInfo} ins = {ins} />
+            ))}
+            </ul>
+          </div>
         </div>
       </div>
       <div className="App">
