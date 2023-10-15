@@ -170,14 +170,16 @@ const App = () => {
           {/*<MergedArrayObjs array1={items} array2={items}/>*/}
           <PopupBox />
           <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
-          <Stats/>
+          {/*<Stats/>*/}
         </div>
         
         <div className="right-side">
           <h2>Recipes</h2>
+          <ul>
           {recipes.map((recipe) => (
             <RecipeBox key={recipe.id} recipe={recipe} handleInfo = {handleInfo} ins = {ins} />
           ))}
+          </ul>
         </div>
       </div>
       <div className="App">

@@ -35,7 +35,7 @@ const textFromImg = async (image) => {
       }
     })
     console.log(max)
-    updateTrips(max)
+    //updateTrips(max)
 
     const regEx2 = /\b[a-zA-Z]{2,}\b/g;
     const ingredients = []
