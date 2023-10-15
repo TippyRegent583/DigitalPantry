@@ -95,50 +95,56 @@ const ItemList = ({ items }) => {
   );
 };
 
-
-const RecipeBox = ({ recipe }) => {
+const RecipeBox = ({ recipe , handleInfo , ins}) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   const handleClick = () => {
     setIsOpen(!isOpen);
+    handleInfo(recipe.id)
   };
 
   return (
     <div className="recipe-box" onClick={handleClick}>
-      <h3>{recipe.name}</h3>
-      <p>{"# of # ingredients available"}</p>
-      {isOpen && <p>{recipe.instructions}</p>}
+      <h3>{recipe.title}</h3>
+      <p>Missing Ingredients: {recipe.missedIngredientCount}</p>
+      <p>Used Ingredients: {recipe.usedIngredientCount}</p>
+      <p>Unused Ingredients: {recipe.unusedIngredients.length}</p>
+      {isOpen && (
+        <div>
+          {Array.isArray(ins) ? (
+            <div>
+              {ins.map((step, index) => (
+                <p key={index}>{step.step}</p>
+              ))}
+            </div>
+          ) : null}
+        </div>
+      )}
     </div>
   );
 };
 
 
 const App = () => {
+  console.log("Hey")
+  console.log("Data", RecipeFinder.getPantry)
 
-  const items = [
-    { name: "Apple", quantity: 1, unit: "lb" },
-    { name: "Banana", quantity: 2, unit: "pcs" },
-    { name: "Milk", quantity: 1, unit: "gal" },
-  ];
+  const [pantry, setPantry] = useState([])
+  const [recipes, setRecipes] = useState([])
+  const [ins, setIns] = useState('')
 
-  const items2 = [
-    { name: "Apple", quantity: 1, unit: "lb" },
-    { name: "Orange", quantity: 2, unit: "pcs" },
-    { name: "Milk", quantity: 4, unit: "gal" },
-  ];
-
-  const recipes = [
-    {
-      name: "Chocolate Chip Cookies",
-      instructions:
-        "Preheat oven to 350 degrees F (175 degrees C). Cream together 1 cup butter and 1 cup sugar until light and fluffy. Beat in 2 eggs one at a time, then stir in 2 1/4 cups all-purpose flour, 1 teaspoon baking soda, and 1 teaspoon salt. Fold in 1 cup semisweet chocolate chips. Drop by rounded tablespoons onto ungreased baking sheets. Bake for 10-12 minutes, or until golden brown. Let cool on baking sheets for a few minutes before transferring to a wire rack to cool completely.",
-    },
-    {
-      name: "Banana Bread",
-      instructions:
-        "Preheat oven to 350 degrees F (175 degrees C). Grease and flour a 9x5 inch loaf pan. In a large bowl, mash 3 ripe bananas. In a separate bowl, cream together 1/2 cup butter and 1 cup sugar until light and fluffy. Beat in 2 eggs one at a time, then stir in 1 1/2 cups all-purpose flour, 1 teaspoon baking soda, 1/2 teaspoon salt, and 1/2 teaspoon ground cinnamon. Fold in the mashed bananas. Pour batter into prepared loaf pan and bake for 50-60 minutes, or until a toothpick inserted into the center comes out clean. Let cool in pan for 10 minutes before removing and cooling completely on a wire rack.",
-    },
-  ];
+  const handleInfo = async (id) => {
+    try {
+      const response = await fetch(`https://api.spoonacular.com/recipes/${id}/analyzedInstructions?apiKey=${apiKey}`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setIns(data[0].steps);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
   return (
 
@@ -149,24 +155,24 @@ const App = () => {
       <div className="all-containers">
         <div className="left-side">
           <h2>Pantry</h2>
-          <ItemList items={items} />
-          <ItemList items={items2} />
-          {/*<CombinedList items={items} items2={items2}/>*/}
-          <CombinedList map1={items} map2={items2} />
+          
+          {pantry.length > 0 ? ( // Conditional rendering based on pantry data
+          <ItemList items={pantry} />
+          ) : (
+          <p>Loading pantry data...</p>
+          )}
           <PopupBox />
-
+          <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
         </div>
         
         <div className="right-side">
           <h2>Recipes</h2>
           {recipes.map((recipe) => (
-            <RecipeBox key={recipe.name} recipe={recipe} />
+            <RecipeBox key={recipe.id} recipe={recipe} handleInfo = {handleInfo} ins = {ins} />
           ))}
         </div>
       </div>
       <div className="App">
-      <RecipeFinder items={items} />
-
     </div>
       
     </div>
@@ -174,7 +180,4 @@ const App = () => {
 }
 
 export default App;
-
-
-
 
