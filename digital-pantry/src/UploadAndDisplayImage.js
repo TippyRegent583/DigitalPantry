@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { updateTrips } from "./Stats";
-
-
 
 const textFromImg = async (image) => {
   const { createWorker } = require('tesseract.js');
@@ -35,7 +32,6 @@ const textFromImg = async (image) => {
       }
     })
     console.log(max)
-    //updateTrips(max)
 
     const regEx2 = /\b[a-zA-Z]{2,}\b/g;
     const ingredients = []
@@ -52,7 +48,6 @@ const textFromImg = async (image) => {
         ingredients.push(item)
       }
     })
-    console.log("DONE!!!")
     await worker.terminate();
   })();
 }

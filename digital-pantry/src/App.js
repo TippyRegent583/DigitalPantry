@@ -10,7 +10,6 @@ import PopupBoxUltimate from './PopupBoxUltimate';
 import RecipeFinder from './RecipeFinder';
 import MergedArrayObjs from './MergedArrayObjs';
 //import ItemList from './ItemListMaker';
-import Stats from './Stats.js';
 
 //import UploadImage from './UploadImage';
 const apiKey = '94c3a65b06f84d5fb0a512206092b8e2'
@@ -170,7 +169,6 @@ const App = () => {
           {/*<MergedArrayObjs array1={items} array2={items}/>*/}
           <PopupBox />
           <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
-          {/*<Stats/>*/}
         </div>
         
         <div className="right-side">
