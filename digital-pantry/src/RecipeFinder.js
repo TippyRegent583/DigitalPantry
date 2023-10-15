@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
 
-const handleMerge = (newIngredient) => {
-  // Create an object representing the ingredient and add it to the pantry
-  RecipeFinder.handleMerge(newIngredient)
-}
-export {handleMerge}
-
 const RecipeFinder = (props) => {
   const [apiKey] = useState('c915c42ef4e84983b197eb7cc6421be6');
   const [ingredient, setIngredient] = useState('');
   const { pantry } = props;
   const { recipes } = props;
-  const [searchRecipe, setSearchRecipe] = useState('');
+  const[searchRecipe, setSearchRecipe] = useState([]);
+  const { merge } = props;
   const [ins, setIns] = useState('');
 
   const getPantry = () => {
@@ -56,10 +51,17 @@ const RecipeFinder = (props) => {
     setIngredient('');
   };
 
-  const handleMerge = (newIngredient) => {
+  const handleMerge = async () => {
     // Create an object representing the ingredient and add it to the pantry
-    RecipeFinder.props.setPantry([...pantry, ...newIngredient]);
+    console.log(merge)
+    merge.forEach((m) => {
+      const newIngredient = { name: m, count: 1, unit: 'unit' };
+      props.setPantry((prevPantry) => [...prevPantry, newIngredient]);
+      console.log("Pantry "+ pantry)
+    })
+    props.setMerge('')
   };
+
 
   const handleInfo = async ({ id }) => {
     console.log(id)
@@ -124,6 +126,7 @@ const RecipeFinder = (props) => {
       <button onClick={handleAdd}>Add</button>
       <div>
         <button onClick={handleSearch}>Find Recipes</button>
+        <button onClick={handleMerge}>Merge</button>
         <div>
           <input
             type="text"

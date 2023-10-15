@@ -1,16 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
-import UploadAndDisplayImage from './UploadAndDisplayImage';
+//import UploadAndDisplayImage from './UploadAndDisplayImage';
 import React, { useEffect, useState, useMemo } from "react";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@material-ui/core/Button';
-import PopupBox from './PopupBox';
-import PopupBoxUltimate from './PopupBoxUltimate';
+//import PopupBox from './PopupBox';
+//import PopupBoxUltimate from './PopupBoxUltimate';
 import RecipeFinder from './RecipeFinder';
 import MergedArrayObjs from './MergedArrayObjs';
 //import ItemList from './ItemListMaker';
 import Stats from './Stats.js';
+import CameraInput from './CameraInput';
 
 //import UploadImage from './UploadImage';
 const apiKey = '94c3a65b06f84d5fb0a512206092b8e2'
@@ -128,6 +129,20 @@ const RecipeBox = ({ recipe , handleInfo , ins}) => {
 };
 
 
+//========================================================================
+
+
+
+//========================================================================
+function DisplayScannedText({ scannedText }) {
+  return (
+    <div className="scanned-text">
+      <h2>Scanned Text</h2>
+      <p>{scannedText}</p>
+    </div>
+  );
+}
+
 const App = () => {
   console.log("Hey")
   console.log("Data", RecipeFinder.getPantry)
@@ -136,6 +151,13 @@ const App = () => {
   const [recipes, setRecipes] = useState([])
   const [ins, setIns] = useState('')
   const [merge, setMerge] = useState([])
+  const [scannedText, setScannedText] = useState([]);
+
+  const handleImageUpload = async (event) => {
+    const image = event.target.files[0];
+    const text = await textFromImg(image);
+    setScannedText(text);
+  };
 
   const handleInfo = async (id) => {
     try {
@@ -148,6 +170,98 @@ const App = () => {
     } catch (error) {
       console.error('Error fetching data:', error);
     }
+  };
+
+  const textFromImg = async (image) => {
+    const { createWorker } = require('tesseract.js');
+    const worker = await createWorker('eng');
+  
+    (async () => {
+      const { data: { text } } = await worker.recognize(image);
+      const lines = text.split("\n");
+  
+      const regEx0 = /\d+(\.\d+)/;
+      const numbs = []
+      const regEx1 = /\s(F|B)\s/g;
+      const foodLines = []
+      lines.forEach((line) => {
+        if (regEx1.test(line)) {
+          foodLines.push(line)
+        }
+  
+        const prices = line.match(regEx0)
+        if (prices != null) {
+          prices.forEach((num) => {
+            numbs.push(parseFloat(num))
+          })
+        }
+      });
+  
+      let max = 0.0
+      numbs.forEach((num) => {
+        if (num > max) {
+          max = num
+        }
+      })
+      console.log(max)
+      //updateTrips(max)
+  
+      const regEx2 = /\b[a-zA-Z]{2,}\b/g;
+      const ingredients = []
+      foodLines.forEach((line) => {
+        const matches = line.match(regEx2)
+        let item = ""
+  
+        if (matches != null) {
+          matches.forEach((word) => {
+            if (word != null) {
+              item += (word + ' ')
+            }
+          })
+          ingredients.push(item)
+        }
+      })
+      console.log("DONE!!!")
+      await worker.terminate();
+      console.log(ingredients)
+      setMerge(ingredients)
+    })();
+  }
+  
+  const UploadAndDisplayImage = (props) => {
+    const {handleImageUpload} = props
+  
+    const [selectedImage, setSelectedImage] = useState(null);
+  
+    return (
+      <div className="upload-columns">
+  
+        {selectedImage && (
+          <div>
+            <img
+              alt="not found"
+              width={"250px"}
+              src={URL.createObjectURL(selectedImage)}
+            />
+            <br />
+            <button onClick={() => setSelectedImage(null)}>Remove</button>
+          </div>
+        )}
+        <handleImageUpload/>
+        <br />
+        <br />
+        <input
+          type="file"
+          name="myImage"
+          onChange={(event) => {
+            console.log(event.target.files[0]);
+            setSelectedImage(event.target.files[0]);
+            textFromImg(event.target.files[0]);
+          }}
+        />
+      </div>
+      
+    );
   };
 
   return (
@@ -169,12 +283,20 @@ const App = () => {
           {/*<ItemList items={items2} />*/}
           
           {/*<MergedArrayObjs array1={items} array2={items}/>*/}
-          <PopupBox merge = {merge} setMerge = {setMerge}/>
-          <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns}/>
+          <h1>Scan Receipt</h1>
+        <div className='upload-view'>
+          <UploadAndDisplayImage/> 
+        </div>
+        <div className='webcam-view'>
+          <p>or</p>
+          <CameraInput scannedText/>
+        </div>
+        <div>
+        <DisplayScannedText scannedText={scannedText} />
+        </div>
           {/*<Stats/>*/}
         </div>
         <div>
-          {merge}
         </div>
         
         <div className="right-side">
@@ -184,6 +306,12 @@ const App = () => {
             <RecipeBox key={recipe.id} recipe={recipe} handleInfo = {handleInfo} ins = {ins} />
           ))}
           </ul>
+          <div>
+            {merge}
+          </div>
+          <div>
+          <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns} merge = {merge} setMerge = {setMerge}/>
+          </div>
         </div>
       </div>
       <div className="App">
@@ -194,4 +322,3 @@ const App = () => {
 }
 
 export default App;
-
