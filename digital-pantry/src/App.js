@@ -184,7 +184,7 @@ const App = () => {
   
       const regEx0 = /\d+(\.\d+)/;
       const numbs = []
-      const regEx1 = /\s(F|B)\s/g;
+      const regEx1 = /\s(F)\s/g;
       const foodLines = []
       lines.forEach((line) => {
         if (regEx1.test(line)) {
@@ -273,7 +273,7 @@ const App = () => {
       <div className="main-container">
         <div className="column">
           <div className="item">
-            <h2>Pantry</h2>
+            <h1>Pantry</h1>
           </div>
 
           
@@ -293,23 +293,31 @@ const App = () => {
         </div>
         <div className="column">
           
+          <div className='img-round'><img src={palImg} className='pal-img'></img></div>
+          <div className='item'><h1>Functions</h1></div>
+          <hr></hr>
+          <div className='item'><h2>Scan Receipt</h2></div>
+          
           <div className='upload-view'>
               <UploadAndDisplayImage/> 
           </div>
+          {/*
           <div className="item">
             <div className='webcam-view'>
               <div className="item"><p>or</p></div>
               <CameraInput scannedText/>
             </div>
           </div>
+          */}
           <div>
             <hr></hr>
             <DisplayScannedText scannedText={scannedText} />
-            <hr></hr>
+            <div>
+              {merge}
+            </div>
+            
           </div>
-          <div>
-            {merge}
-          </div>
+          
           <div>
           <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns} merge = {merge} setMerge = {setMerge}/>
           </div>
@@ -319,7 +327,7 @@ const App = () => {
         
         <div className="column">
           <div className="item">
-            <h2>Recipes</h2>
+            <h1>Recipes</h1>
           </div>
           <ul>
             {recipes.map((recipe) => (

@@ -116,18 +116,23 @@ const RecipeFinder = (props) => {
         )}
       </ul>
         */}
+      <button onClick={handleMerge}>Merge Scan</button>
+      <hr></hr>
+      <div>
+      <h2>Add to Pantry</h2>
       <input
         type="text"
         placeholder="Enter an ingredient"
         value={ingredient}
         onChange={(e) => setIngredient(e.target.value)}
       />
+      
       <button onClick={handleAdd}>Add</button>
       <hr></hr>
       <h2>Find Recipes</h2>
       <div>
-        <button onClick={handleSearch}>Find Recipes</button>
-        <button onClick={handleMerge}>Merge</button>
+        <button onClick={handleSearch}>Search by Pantry</button>
+        
         <div>
           <input
             type="text"
@@ -161,6 +166,7 @@ const RecipeFinder = (props) => {
           <p>No recipes found with this ingredient.</p>
         )}
         */}
+      </div>
       </div>
     </div>
   );
