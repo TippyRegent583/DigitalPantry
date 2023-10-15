@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { handeMerge } from "./RecipeFinder.js";
 
 const textFromImg = async (image) => {
   const { createWorker } = require('tesseract.js');
@@ -49,6 +50,7 @@ const textFromImg = async (image) => {
       }
     })
     await worker.terminate();
+    handeMerge(ingredients)
   })();
 }
 
