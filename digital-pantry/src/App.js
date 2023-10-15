@@ -12,6 +12,8 @@ import MergedArrayObjs from './MergedArrayObjs';
 //import ItemList from './ItemListMaker';
 import Stats from './Stats.js';
 import CameraInput from './CameraInput';
+import palImg from './ThePal.png';
+
 
 //import UploadImage from './UploadImage';
 const apiKey = '94c3a65b06f84d5fb0a512206092b8e2'
@@ -267,45 +269,44 @@ const App = () => {
   return (
 
     <div className="app">
-      <div className="title">
-        <h1>App</h1>
-      </div>
-      <div className="all-containers">
-        <div className="left-side">
-          <h2>Pantry</h2>
+      <nav><h1>PANTRY PAL</h1></nav>
+      <div className="main-container">
+        <div className="column">
+          <div className="item">
+            <h2>Pantry</h2>
+          </div>
+
+          
           
           {pantry.length > 0 ? ( // Conditional rendering based on pantry data
           <ItemList items={pantry} />
           ) : (
-          <p>Loading pantry data...</p>
+          <p>Enter ingredients to begin!</p>
           )}
-          {/*<ItemList items={items} />*/}
-          {/*<ItemList items={items2} />*/}
           
-          {/*<MergedArrayObjs array1={items} array2={items}/>*/}
-          <h1>Scan Receipt</h1>
-        <div className='upload-view'>
-          <UploadAndDisplayImage/> 
+          
+          
+
+          
+          
+          
         </div>
-        <div className='webcam-view'>
-          <p>or</p>
-          <CameraInput scannedText/>
-        </div>
-        <div>
-        <DisplayScannedText scannedText={scannedText} />
-        </div>
-          {/*<Stats/>*/}
-        </div>
-        <div>
-        </div>
-        
-        <div className="right-side">
-          <h2>Recipes</h2>
-          <ul>
-          {recipes.map((recipe) => (
-            <RecipeBox key={recipe.id} recipe={recipe} handleInfo = {handleInfo} ins = {ins} />
-          ))}
-          </ul>
+        <div className="column">
+          
+          <div className='upload-view'>
+              <UploadAndDisplayImage/> 
+          </div>
+          <div className="item">
+            <div className='webcam-view'>
+              <div className="item"><p>or</p></div>
+              <CameraInput scannedText/>
+            </div>
+          </div>
+          <div>
+            <hr></hr>
+            <DisplayScannedText scannedText={scannedText} />
+            <hr></hr>
+          </div>
           <div>
             {merge}
           </div>
@@ -313,11 +314,26 @@ const App = () => {
           <RecipeFinder pantry = {pantry} setPantry = {setPantry} recipes = {recipes} setRecipes = {setRecipes} ins = {ins} setIns = {setIns} merge = {merge} setMerge = {setMerge}/>
           </div>
         </div>
+        
+        
+        
+        <div className="column">
+          <div className="item">
+            <h2>Recipes</h2>
+          </div>
+          <ul>
+            {recipes.map((recipe) => (
+              <RecipeBox key={recipe.id} recipe={recipe} handleInfo = {handleInfo} ins = {ins} />
+            ))}
+          </ul>
+          
+        </div>
       </div>
-      <div className="App">
     </div>
-      
-    </div>
+    
+
+    
+    
   );
 }
 

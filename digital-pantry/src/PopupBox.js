@@ -25,7 +25,7 @@ export default PopupBox;
 const PopupBox = () => {
   
   return (
-    <Popup trigger={<button>Scan Receipt</button>} modal>
+    <Popup trigger={<div className="item"><button>Scan Receipt</button></div>} modal>
       <div className='popup-box'>
         <h1>Scan Receipt</h1>
         <div className='upload-view'>
